@@ -10,7 +10,7 @@ data class Movie (
     @SerializedName("title") var title: String,
     @SerializedName("poster_path") var posterImage: String,
     @SerializedName("backdrop_path") var backdropImage: String,
-    @SerializedName("release_date") var releaseDate: Date,
+    @SerializedName("release_date") var releaseDate: String,
     @SerializedName("vote_average") var rating: Double,
     @SerializedName("overview") var overview: String
 ) :Parcelable {
