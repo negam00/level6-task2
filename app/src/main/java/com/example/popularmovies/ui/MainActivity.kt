@@ -2,7 +2,10 @@ package com.example.popularmovies.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.popularmovies.R
@@ -14,6 +17,7 @@ const val EXTRA_MOVIE = "EXTRA_MOVIE"
 class MainActivity : AppCompatActivity() {
     private val movies = arrayListOf<Movie>()
     private val movieAdapter = MovieAdapter(movies) { movie -> onMovieItemClick(movie) }
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         initViews()
+        initViewModel()
     }
 
     private fun initViews() {
@@ -29,6 +34,20 @@ class MainActivity : AppCompatActivity() {
         rvMovies.adapter = movieAdapter
 
         btnMovieYear.setOnClickListener { onSumbitClick() }
+    }
+
+    private fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        viewModel.moviesList.observe(this, Observer {
+            movies.clear()
+            movies.addAll(it.movies)
+            movieAdapter.notifyDataSetChanged()
+        })
+
+        viewModel.error.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun onSumbitClick() {
