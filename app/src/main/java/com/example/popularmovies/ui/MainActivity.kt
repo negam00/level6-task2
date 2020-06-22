@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        val gridLayoutManager = GridLayoutManager(this, 1, RecyclerView.VERTICAL, false)
+        val gridLayoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
         rvMovies.layoutManager = gridLayoutManager
         rvMovies.adapter = movieAdapter
 
@@ -51,7 +51,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onSumbitClick() {
+        val inputYear = etMovieYear.text.toString()
 
+        if (inputYear.isBlank() ||  inputYear.toInt() < 1900) {
+            Toast.makeText(this, "Please enter a valid year.", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.getMovies(inputYear)
+        }
     }
 
     private fun onMovieItemClick(movie: Movie) {
